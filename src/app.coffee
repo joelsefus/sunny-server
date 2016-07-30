@@ -1,11 +1,12 @@
 os = require 'os'
 
-
 Sequelize = require 'sequelize'
 epilogue = require 'epilogue'
 restify = require 'restify'
 
-server_port = 8081
+PORT = process.env.NODE_PORT or 8081
+HOST = process.env.NODE_IP or os.hostname()
+
 
 
 # init database object
@@ -56,6 +57,6 @@ clientResource = epilogue.resource
 
 sql.sync()
   .then ->
-    server.listen server_port, -> 
-      console.log "Server running on port #{server_port}."
+    server.listen PORT, HOST, -> 
+      console.log "Server running on #{HOST}:#{PORT}."
   

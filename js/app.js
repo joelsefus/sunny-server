@@ -1,4 +1,4 @@
-var Sequelize, clientResource, epilogue, os, respond, restify, server, server_port, sql;
+var HOST, PORT, Sequelize, clientResource, epilogue, os, respond, restify, server, sql;
 
 os = require('os');
 
@@ -8,7 +8,9 @@ epilogue = require('epilogue');
 
 restify = require('restify');
 
-server_port = 8081;
+PORT = process.env.NODE_PORT || 8081;
+
+HOST = process.env.NODE_IP || os.hostname();
 
 sql = new Sequelize({
   dialect: 'sqlite',
@@ -47,7 +49,7 @@ clientResource = epilogue.resource({
 });
 
 sql.sync().then(function() {
-  return server.listen(server_port, function() {
-    return console.log("Server running on port " + server_port + ".");
+  return server.listen(PORT, HOST, function() {
+    return console.log("Server running on " + HOST + ":" + PORT + ".");
   });
 });
