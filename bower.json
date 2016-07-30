@@ -1,0 +1,24 @@
+{
+  "name": "migmatite",
+  "version": "0.0.0",
+  "homepage": "https://github.com/umeboshi2/migmatite",
+  "authors": [
+    "Joseph Rawson <joseph.rawson.works@littledebian.org>"
+  ],
+  "description": "project skeleton",
+  "main": "",
+  "moduleType": [],
+  "license": "UNLICENSED",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-fileinput": "~4.2.7",
+    "TableDnD": "~0.9.1",
+    "tag-it": "aehlke/tag-it"
+  }
+}
