@@ -37,7 +37,17 @@ gulp.task 'indexhtml', (callback) ->
   index = page manifest, theme
   fs.writeFileSync 'index.html', beautify index
   console.log "Created new index.html"
-  
+
+gulp.task 'indexdev', (callback) ->
+  manifest = {'app.js':'app.js'}
+  theme = 'cornsilk'
+  page = require './index'
+  beautify = require('js-beautify').html
+  #console.log "page", page manifest
+  index = page manifest, theme
+  fs.writeFileSync 'index-dev.html', beautify index
+  console.log "Created new index-dev.html"
+
 gulp.task 'default', ->
   gulp.start 'coffee'
   
