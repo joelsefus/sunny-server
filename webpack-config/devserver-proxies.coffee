@@ -14,4 +14,10 @@ module.exports =
   '/health/*':
     target: "http://#{os.hostname()}:8081"
     secure: false
+  '/login/*':
+    target: "http://#{os.hostname()}:8081"
+    secure: false
+  '/logout/*':
+    target: "http://#{os.hostname()}:8081"
+    secure: false
         
