@@ -11,6 +11,10 @@ index = tc.renderable(function(manifest, theme) {
       tc.meta({
         charset: 'utf-8'
       });
+      tc.meta({
+        name: 'viewport',
+        content: "width=device-width, initial-scale=1"
+      });
       tc.link({
         rel: 'stylesheet',
         type: 'text/css',

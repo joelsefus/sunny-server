@@ -5,6 +5,7 @@ index = tc.renderable (manifest, theme) ->
   tc.html xmlns:'http://www.w3.org/1999/xhtml', ->
     tc.head ->
       tc.meta charset:'utf-8'
+      tc.meta name:'viewport', content:"width=device-width, initial-scale=1"
       tc.link rel:'stylesheet', type:'text/css',
       href:"assets/stylesheets/font-awesome.css"
       tc.link rel:'stylesheet', type:'text/css',
