@@ -73,7 +73,7 @@ gulp.task 'default', ->
   gulp.start 'coffee'
   
 gulp.task 'watch', ['coffee', 'serve'], ->
-  gulp.watch ['./src/**/*.coffee'], ['coffee']
+  gulp.watch ['./src/**/*.coffee'], ['coffee', 'indexdev']
   
 
 gulp.task 'production', ->
