@@ -1,18 +1,18 @@
-var APIPATH, HOST, PORT, Sequelize, clientPath, clientResource, config_module, db, documentPath, documentResource, env, epilogue, os, path, respond, restify, server, sql;
+var APIPATH, HOST, PORT, Sequelize, app, bodyParser, clientPath, clientResource, db, documentPath, documentResource, epilogue, express, http, os, path, server, sql;
 
 os = require('os');
 
 path = require('path');
 
+http = require('http');
+
 Sequelize = require('sequelize');
 
 epilogue = require('epilogue');
 
-restify = require('restify');
+express = require('express');
 
-env = process.env.NODE_ENV || 'development';
-
-config_module = require('./config');
+bodyParser = require('body-parser');
 
 PORT = process.env.NODE_PORT || 8081;
 
@@ -26,28 +26,41 @@ sql["import"]('./models/client');
 
 sql["import"]('./models/document');
 
-server = restify.createServer();
+app = express();
 
-server.get('/health', function(req, res, next) {
+app.use(bodyParser.json());
+
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+
+server = http.createServer(app);
+
+app.get('/health', function(req, res, next) {
   return res.end();
 });
 
-server.use(restify.queryParser());
-
-server.use(restify.bodyParser());
-
-epilogue.initialize({
-  app: server,
-  sequelize: sql
+app.get('/', function(req, res, next) {
+  var beautify, index, manifest, page, theme;
+  manifest = require('../build/manifest.json');
+  theme = 'cornsilk';
+  page = require('./index');
+  beautify = require('js-beautify').html;
+  index = page(manifest, theme);
+  index = beautify(index);
+  res.writeHead(200, {
+    'Content-Length': Buffer.byteLength(index),
+    'Content-Type': 'text/html'
+  });
+  res.write(index);
+  res.end();
+  return next();
 });
 
-respond = function(request, response, next) {
-  return response.send("Hello " + request.params.name + "@@@@!");
-};
-
-server.get('/hello/:name', respond);
-
-server.head('/hello/:name', respond);
+epilogue.initialize({
+  app: app,
+  sequelize: sql
+});
 
 APIPATH = '/api/dev';
 
@@ -63,35 +76,6 @@ documentPath = APIPATH + "/sitedocuments";
 documentResource = epilogue.resource({
   model: sql.models.document,
   endpoints: [documentPath, documentPath + "/:name"]
-});
-
-server.get(/\/assets\/?.*/, restify.serveStatic({
-  directory: path.resolve(__dirname, '..')
-}));
-
-server.get(/^\/build\//, restify.serveStatic({
-  directory: path.resolve(__dirname, '..')
-}));
-
-server.get(/\/fonts\//, restify.serveStatic({
-  directory: path.resolve(__dirname, '..')
-}));
-
-server.get('/', function(req, res, next) {
-  var beautify, index, manifest, page, theme;
-  manifest = require('../build/manifest.json');
-  theme = 'cornsilk';
-  page = require('./index');
-  beautify = require('js-beautify').html;
-  index = page(manifest, theme);
-  index = beautify(index);
-  res.writeHead(200, {
-    'Content-Length': Buffer.byteLength(index),
-    'Content-Type': 'text/html'
-  });
-  res.write(index);
-  res.end();
-  return next();
 });
 
 sql.sync().then(function() {
