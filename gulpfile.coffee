@@ -62,7 +62,7 @@ gulp.task 'webpack:build-prod', ['compass'], (callback) ->
 gulp.task 'default', ->
   gulp.start 'coffee'
   
-gulp.task 'watch', ['coffee', 'serve'], ->
+gulp.task 'watch', ['coffee', 'indexpage', 'serve'], ->
   process.env.__DEV__ = 'true'
   gulp.watch ['./src/**/*.coffee'], ['coffee', 'indexpage']
   
