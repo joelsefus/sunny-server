@@ -10,10 +10,12 @@
   "author": "Ionut-Cristian Florescu <ionut.florescu@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.15.2",
     "epilogue": "^0.6.6",
     "express": "^4.14.0",
     "js-beautify": "^1.6.3",
-    "restify": "^4.1.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "sequelize": "^3.23.6",
     "sqlite3": "^3.1.4",
     "teacup": "^2.0.0"
