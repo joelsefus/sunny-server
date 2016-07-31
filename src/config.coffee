@@ -5,5 +5,6 @@ module.exports =
     omitNull: true
   production:
     dialect: 'sqlite'
-    storage: './sunny.sqlite'
+    # trailing slash on OPENSHIFT_DATA_DIR
+    storage: "#{process.env.OPENSHIFT_DATA_DIR}sunny.sqlite"
     omitNull: true

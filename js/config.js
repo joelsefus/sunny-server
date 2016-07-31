@@ -6,7 +6,7 @@ module.exports = {
   },
   production: {
     dialect: 'sqlite',
-    storage: './sunny.sqlite',
+    storage: process.env.OPENSHIFT_DATA_DIR + "sunny.sqlite",
     omitNull: true
   }
 };
