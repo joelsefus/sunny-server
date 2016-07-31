@@ -69,14 +69,6 @@ server.get(/\/assets\/?.*/, restify.serveStatic({
   directory: path.resolve(__dirname, '..')
 }));
 
-console.log('__dirname', __dirname);
-
-console.log('join-assets', path.join(__dirname, '..', 'assets'));
-
-console.log('resolve-assets', path.resolve(__dirname, '..', 'assets'));
-
-console.log('resolve-up', path.resolve(__dirname, '..'));
-
 server.get(/^\/build\//, restify.serveStatic({
   directory: path.resolve(__dirname, '..')
 }));
@@ -92,6 +84,7 @@ server.get('/', function(req, res, next) {
   page = require('./index');
   beautify = require('js-beautify').html;
   index = page(manifest, theme);
+  index = beautify(index);
   res.writeHead(200, {
     'Content-Length': Buffer.byteLength(index),
     'Content-Type': 'text/html'
