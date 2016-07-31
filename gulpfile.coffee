@@ -4,18 +4,16 @@ fs = require 'fs'
 
 gulp = require 'gulp'
 gutil = require 'gulp-util'
-
-runSequence = require 'run-sequence'
-
-webpack = require 'webpack'
-
-
 size = require 'gulp-size'
 compass = require 'gulp-compass'
 coffee = require 'gulp-coffee'
 nodemon = require 'gulp-nodemon'
+#runSequence = require 'run-sequence'
 
+webpack = require 'webpack'
 tc = require 'teacup'
+
+css_theme = 'cornsilk'
 
 gulp.task 'compass', () ->
   gulp.src('./sass/*.scss')
@@ -25,7 +23,6 @@ gulp.task 'compass', () ->
     sass: 'sass'
   .pipe size()
   .pipe gulp.dest 'assets/stylesheets'
-
 
 gulp.task 'coffee', () ->
   gulp.src('./src/**/*.coffee')
@@ -42,7 +39,7 @@ gulp.task 'serve', () ->
   
 gulp.task 'indexhtml', (callback) ->
   manifest = require './build/manifest.json'
-  theme = 'cornsilk'
+  theme = css_theme
   page = require './index'
   beautify = require('js-beautify').html
   #console.log "page", page manifest
@@ -52,7 +49,7 @@ gulp.task 'indexhtml', (callback) ->
 
 gulp.task 'indexdev', (callback) ->
   manifest = {'app.js':'app.js'}
-  theme = 'cornsilk'
+  theme = css_theme
   page = require './src/index'
   beautify = require('js-beautify').html
   #console.log "page", page manifest
@@ -79,7 +76,7 @@ gulp.task 'watch', ['coffee', 'serve'], ->
   gulp.watch ['./src/**/*.coffee'], ['coffee']
   
 
-gulp.task 'serveoirig', ->
-  server = require './server'
-  console.log 'server', server
-  
+gulp.task 'production', ->
+  gulp.start 'compass'
+  gulp.start 'coffee'
+  gulp.start 'webpack:build-prod'
