@@ -37,17 +37,7 @@ gulp.task 'serve', () ->
     script: 'js/app.js'
     watch: 'js/**/*.js'
   
-gulp.task 'indexhtml', (callback) ->
-  manifest = require './build/manifest.json'
-  theme = css_theme
-  page = require './index'
-  beautify = require('js-beautify').html
-  #console.log "page", page manifest
-  index = page manifest, theme
-  fs.writeFileSync 'index.html', beautify index
-  console.log "Created new index.html"
-
-gulp.task 'indexdev', (callback) ->
+gulp.task 'indexpage', (callback) ->
   manifest = {'app.js':'app.js'}
   theme = css_theme
   page = require './src/index'
@@ -73,7 +63,8 @@ gulp.task 'default', ->
   gulp.start 'coffee'
   
 gulp.task 'watch', ['coffee', 'serve'], ->
-  gulp.watch ['./src/**/*.coffee'], ['coffee', 'indexdev']
+  process.env.__DEV__ = 'true'
+  gulp.watch ['./src/**/*.coffee'], ['coffee', 'indexpage']
   
 
 gulp.task 'production', ->
