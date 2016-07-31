@@ -5,9 +5,7 @@ os = require 'os'
 webpack = require 'webpack'
 
 ManifestPlugin = require 'webpack-manifest-plugin'
-
 StatsPlugin = require 'stats-webpack-plugin'
-
 
 loaders = require './webpack-config/loaders'
 entries = require './webpack-config/entries'
@@ -19,6 +17,7 @@ BuildEnvironment = 'dev'
 if process.env.PRODUCTION_BUILD
   BuildEnvironment = 'production'
   Clean = require 'clean-webpack-plugin'
+  CompressionPlugin = require 'compression-webpack-plugin'
   ChunkManifestPlugin = require 'chunk-manifest-webpack-plugin'
   console.log "==============PRODUCTION BUILD=============="
   
@@ -75,6 +74,7 @@ else if BuildEnvironment is 'production'
     new webpack.optimize.UglifyJsPlugin
       compress:
         warnings: true
+    new CompressionPlugin()
     #new ChunkManifestPlugin
     #  filename: 'chunk-manifest.json'
     #  manifestVariable: 'webpackManifest'
