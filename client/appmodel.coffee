@@ -11,7 +11,7 @@ tc = require 'teacup'
 layout_template = tc.renderable () ->
   tc.div '#navbar-view-container'
   #tc.div '#editor-bar-container'
-  tc.div ".container", ->
+  tc.div ".container-fluid", ->
     tc.div '.row', ->
       tc.div '.col-sm-12', ->
         tc.div '#messages'
@@ -25,10 +25,11 @@ appmodel = new BaseAppModel
   brand:
     name: 'Sunny'
     url: '/'
+  layout_template: layout_template
+  container: 'container-fluid'
   #FIXME
   # applets listed here still need to be required in
   # application.coffee
-  layout_template: layout_template
   applets:
     [
       {
