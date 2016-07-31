@@ -6,9 +6,9 @@ index = tc.renderable (manifest, theme) ->
     tc.head ->
       tc.meta charset:'utf-8'
       tc.link rel:'stylesheet', type:'text/css',
-      href:"stylesheets/fontawesome.css"
+      href:"assets/stylesheets/font-awesome.css"
       tc.link rel:'stylesheet', type:'text/css',
-      href:"stylesheets/bootstrap-#{theme}.css"
+      href:"assets/stylesheets/bootstrap-#{theme}.css"
     tc.body ->
       tc.div '.container-fluid', ->
         tc.div '.row', ->
