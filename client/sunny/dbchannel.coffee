@@ -9,19 +9,6 @@ MainChannel = Backbone.Radio.channel 'global'
 MessageChannel = Backbone.Radio.channel 'messages'
 SunnyChannel = Backbone.Radio.channel 'sunny'
 
-class BaseModel extends Backbone.Model
-  parse: (response) ->
-    if response.result is 'success' 
-      return response.data
-    else
-      MessageChannel.request 'display-message', "Failed to parse model", 'danger'
-      
-
-class BasicClient extends BaseModel
-  url: ->
-    "/api/sunny-dev/sunny/clients/#{@id}"
-
-
 class Client extends Backbone.Model
   urlRoot: '/api/dev/sunny/clients'
 
@@ -51,9 +38,13 @@ SunnyChannel.reply 'add-client', (options) ->
   client.save()
 
 SunnyChannel.reply 'get-client', (id) ->
-  new Client
-    id: id
-  
+  model = sunny_clients.get id
+  if model is undefined
+    new Client
+      id: id
+  else
+    model
+    
 module.exports =
   ClientCollection: ClientCollection
   

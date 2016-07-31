@@ -18,10 +18,8 @@ class Controller extends MainController
   clients: SunnyChannel.request 'client-collection'
   
   list_clients: () ->
-    if __DEV__
-      console.log "List Clients"
     require.ensure [], () =>
-      ListView = require './views/pagelist'
+      ListView = require './views/clientlist'
       view = new ListView
         collection: @clients
       response = @clients.fetch()
@@ -33,34 +31,30 @@ class Controller extends MainController
     , 'sunny-list-clients'
 
   new_client: () ->
-    if __DEV__
-      console.log "ayayayaNew Clients"
     require.ensure [], () =>
-      { NewClientView } = require './views/editor'
+      { NewClientView } = require './views/clienteditor'
       @_show_content new NewClientView
     # name the chunk
     , 'sunny-new-client'
       
 
-      
+  _show_edit_client: (vclass, model) ->
+    view = new vclass
+      model: model
+    @_show_content view
+    
   edit_client: (id) ->
-    if __DEV__
-      console.log "Edit Client"
     require.ensure [], () =>
-      { EditClientView } = require './views/editor'
-      clients = SunnyChannel.request 'client-collection'
-      model = clients.get id
-      if model is undefined
-        console.log 'model not in collection'
-        model = SunnyChannel.request 'get-client', id
-      console.log '@clients, model', @clients, model
-      response = model.fetch()
-      response.done =>
-        window.edclient = model
-        view = new EditClientView
-          model: model
-        window.edview = view
-        @_show_content view
+      { EditClientView } = require './views/clienteditor'
+      model = SunnyChannel.request 'get-client', id
+      if model.has 'name'
+        @_show_edit_client EditClientView, model
+      else
+        response = model.fetch()
+        response.done =>
+          @_show_edit_client EditClientView, model
+        response.fail =>
+          MessageChannel.request 'danger', "Failed to load client data."
     # name the chunk
     , 'sunny-edit-client'
       
