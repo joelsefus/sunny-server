@@ -42,34 +42,42 @@ sql["import"]('./models/client');
 
 sql["import"]('./models/document');
 
-UseMiddleware = false && process.env.__DEV__ === 'true';
+UseMiddleware = false || process.env.__DEV__ === 'true';
 
-passport.use(new Strategy(function(username, password, cb) {
+sql.models.user.findOrCreate({
+  where: {
+    name: 'admin'
+  },
+  defaults: {
+    password: 'admin'
+  }
+}).then(function(user, created) {});
+
+passport.use(new Strategy(function(username, password, done) {
   return sql.models.user.findOne({
     where: {
       name: username
     }
   }).then(function(user) {
     if (!user) {
-      cb(null, false);
+      done(null, false);
+      return;
     }
     if (user.password !== password) {
-      return cb(null, user);
+      done(null, false);
+      return;
     }
+    done(null, user);
   });
 }));
 
-passport.serializeUser(function(user, cb) {
-  return cb(null, user.id);
+passport.serializeUser(function(user, done) {
+  return done(null, user.id);
 });
 
-passport.deserializeUser(function(id, cb) {
-  var umodel;
-  return umodel = db.models.user.findById(id, function(err, user) {
-    if (err) {
-      cb(err);
-    }
-    return cb(null, user);
+passport.deserializeUser(function(id, done) {
+  return sql.models.user.findById(id).then(function(user) {
+    return done(null, user);
   });
 });
 
@@ -95,21 +103,19 @@ app.use(passport.initialize());
 
 app.use(passport.session());
 
-app.get('/login', function(req, res) {});
+app.get('/login', function(req, res) {
+  res.redirect('/');
+});
 
 app.post('/login', passport.authenticate('local', {
-  failureRedirect: '/login'
+  failureRedirect: '/'
 }), function(req, res) {
   return res.redirect('/');
 });
 
 app.get('/logout', function(req, res) {
   req.logout();
-  return res.redirect('/');
-});
-
-app.get('/current/user', function(req, res) {
-  return res.json(req.user);
+  res.redirect('/');
 });
 
 app.get('/health', function(req, res, next) {
@@ -125,12 +131,12 @@ if (UseMiddleware) {
   config = require('../webpack.config');
   compiler = webpack(config);
   app.use(middleware(compiler, {
-    publicPath: config.output.publicPath,
+    publicPath: '/build/',
     stats: {
       colors: true
     }
   }));
-  console.log("Soon to use webpack middleware");
+  console.log("Using webpack middleware");
 } else {
   app.use('/build', gzipStatic(path.join(__dirname, '../build')));
 }
@@ -165,6 +171,15 @@ epilogue.initialize({
 
 APIPATH = '/api/dev';
 
+app.get(APIPATH + "/current-user", function(req, res, next) {
+  var user;
+  user = null;
+  if (req != null ? req.user : void 0) {
+    user = req.user;
+  }
+  return res.json(user);
+});
+
 clientPath = APIPATH + "/sunny/clients";
 
 clientResource = epilogue.resource({
@@ -177,6 +192,10 @@ documentPath = APIPATH + "/sitedocuments";
 documentResource = epilogue.resource({
   model: sql.models.document,
   endpoints: [documentPath, documentPath + "/:name"]
+});
+
+app.get(APIPATH + "/node-docs", function(req, res, next) {
+  return res.json(APIPATH);
 });
 
 server = http.createServer(app);

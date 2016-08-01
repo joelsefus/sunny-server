@@ -26,28 +26,39 @@ sql.import './models/user'
 sql.import './models/client'
 sql.import './models/document'
 
-UseMiddleware = false and process.env.__DEV__ is 'true'
+UseMiddleware = false or process.env.__DEV__ is 'true'
 
+sql.models.user.findOrCreate
+  where:
+    name: 'admin'
+  defaults:
+    password: 'admin'
+.then (user, created) ->
+  return
+  
 
-passport.use new Strategy (username, password, cb) ->
+passport.use new Strategy (username, password, done) ->
   sql.models.user.findOne
     where:
       name: username
   .then (user) ->
     if !user
-      cb null, false
+      done null, false
+      return
     if user.password != password
-      cb null, user
+      done null, false
+      return
+    done null, user
+    return
+    
+passport.serializeUser (user, done) ->
+  done null, user.id
 
-passport.serializeUser (user, cb) ->
-  cb null, user.id
-
-passport.deserializeUser (id, cb) ->
-  umodel = db.models.user.findById id, (err, user) ->
-    if err
-      cb(err)
-    cb null, user
-
+passport.deserializeUser (id, done) ->
+  sql.models.user.findById id
+  .then (user) ->
+    done null, user
+  
 # create express app
 app = express()
 
@@ -69,17 +80,16 @@ app.use passport.initialize()
 app.use passport.session()
 
 app.get '/login', (req, res) ->
+  res.redirect '/'
   return
 
-app.post '/login', passport.authenticate('local', failureRedirect: '/login'), (req, res) ->
+app.post '/login', passport.authenticate('local', failureRedirect: '/'), (req, res) ->
   res.redirect '/'
 
 app.get '/logout', (req, res) ->
   req.logout()
   res.redirect '/'
-
-app.get '/current/user', (req, res) ->
-  res.json req.user
+  return
   
 
 # health url required for openshift
@@ -94,16 +104,19 @@ if UseMiddleware
   config = require '../webpack.config'
   compiler = webpack config
   app.use middleware compiler,
-    publicPath: config.output.publicPath
+    #publicPath: config.output.publicPath
+    # FIXME using abosule path?
+    publicPath: '/build/'
     stats:
       colors: true
-  console.log "Soon to use webpack middleware"
+  console.log "Using webpack middleware"
 else
-  #app.use '/build', express.static(path.join __dirname, '../build')
   app.use '/build', gzipStatic(path.join __dirname, '../build')
 
 
 app.get '/', (req, res, next) ->
+  #if req?.user
+  #  console.log "there is a session user.", req.user
   if UseMiddleware
     manifest = {'app.js':'app.js'}
   else
@@ -128,6 +141,12 @@ epilogue.initialize
 
 APIPATH = '/api/dev'
 
+app.get "#{APIPATH}/current-user", (req, res, next) ->
+  user = null
+  if req?.user
+    user = req.user
+  res.json user
+
 clientPath = "#{APIPATH}/sunny/clients"
 clientResource = epilogue.resource
   model: sql.models.client
@@ -138,6 +157,10 @@ documentResource = epilogue.resource
   model: sql.models.document
   endpoints: [documentPath, "#{documentPath}/:name"]
 
+
+app.get "#{APIPATH}/node-docs", (req, res, next) ->
+  res.json(APIPATH)
+  
 
 server = http.createServer app
 
