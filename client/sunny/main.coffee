@@ -25,5 +25,6 @@ MainChannel.reply 'applet:sunny:route', () ->
   console.log controller
   router = new Router
     controller: controller
-  window.scontroller = controller
+  if __DEV__
+    window.scontroller = controller
   

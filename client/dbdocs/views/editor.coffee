@@ -48,8 +48,16 @@ class NewPageView extends BasePageEditor
   template: AppTemplates.NewPageForm
 
   createModel: ->
-    ResourceChannel.request 'new-document', '', '', ''
+    ResourceChannel.request 'new-document'
+    
 
+  saveModel: ->
+    callbacks =
+      success: => @trigger 'save:form:success', @model
+      error: => @trigger 'save:form:failure', @model
+    docs = ResourceChannel.request 'app-documents'
+    docs.add @model
+    super
 
 class EditPageView extends BasePageEditor
   template: AppTemplates.NewPageForm

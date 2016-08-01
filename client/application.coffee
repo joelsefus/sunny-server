@@ -10,6 +10,7 @@ require 'bootstrap'
 Views = require 'agate/src/views'
 AppModel = require './appmodel'
 
+require 'agate/src/users'
 require 'agate/src/clipboard'
 require 'agate/src/messages'
 require './static-documents'
@@ -58,7 +59,26 @@ MainChannel.on 'appregion:navbar:displayed', ->
   # aregion.show view
   if __DEV__ and DEBUG
     console.warn "__DEV__ navbar displayed"
-
+  # current user should already be fetched before
+  # any view is shown
+  user = MainChannel.request 'current-user'
+  console.log "USER IS", user
+  show_view = (user) ->
+    view = new Views.UserMenuView
+      model: user
+    usermenu = MainChannel.request 'main:app:get-region', 'usermenu'
+    usermenu.show view
+  if not user.has 'name'
+    response = user.fetch()
+    console.log "Fetching user", response
+    response.done =>
+      console.log "User is here", user
+      show_view user
+    response.fail =>
+      MessageChannel.request 'danger', 'Get user failed'
+  else
+    show_view user
+    
 # require applets
 # Applets need to be loaded to provide
 # urls for the app routers
@@ -83,7 +103,14 @@ if __DEV__
   
 
 # Start the Application
-app.start()
+# make sure current user is fetched from server before starting app
+user = MainChannel.request 'current-user'
+response = user.fetch()
+response.done =>
+  app.start()
+response.fail =>
+  console.log "bad things have happened"
+  
 
 module.exports = app
 

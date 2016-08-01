@@ -1,4 +1,8 @@
+Backbone = require 'backbone'
+Marionette = require 'backbone.marionette'
+
 { MainController } = require 'agate/src/controllers'
+{ login_form } = require 'agate/src/templates/forms'
 
 MainChannel = Backbone.Radio.channel 'global'
 MessageChannel = Backbone.Radio.channel 'messages'
@@ -26,7 +30,17 @@ class Controller extends MainController
       
     
   frontdoor: ->
-    @view_page 'intro'
+    user = MainChannel.request 'current-user'
+    console.log 'current-user', user
+    show_login_form = false
+    if not user.has 'name'
+      console.log 'current-user has not name', user
+      view = new Backbone.Marionette.ItemView
+        template: login_form
+      show_login_form = true
+      @_show_content view
+    else
+      @view_page 'intro'
 
 module.exports = Controller
 

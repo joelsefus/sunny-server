@@ -22,24 +22,6 @@ class Controller extends MainController
       model: @root_doc
     @_show_content view
     
-  edit_node: (resource) ->
-    require.ensure [], () =>
-      console.log "HALLO EDIT RESOURCE", resource
-      EditorView = require './views/halloeditor'
-      @_set_resource resource
-      @_get_doc_and_render_view EditorView
-    # name the chunk
-    , 'hallo-edit'
-    
-  ace_edit_node: (resource) ->
-    require.ensure [], () =>
-      console.log "ACE EDIT RESOURCE", resource
-      AceEditorView = require './views/ace-editor'
-      @_set_resource resource
-      @_get_doc_and_render_view AceEditorView
-    # name the chunk
-    , 'ace-edit'
-    
   list_pages: () ->
     console.log "List Pages"
     require.ensure [], () =>
