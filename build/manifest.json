@@ -1,5 +1,7 @@
 {
-  "ace-edit.js": "1.ace-edit-e4008f74775c92cb85d9.js",
-  "app.js": "app-c13a4bb66196ed06ccee.js",
-  "frontdoor-view-resource.js": "0.frontdoor-view-resource-db8aaa0702bacda35c0b.js"
+  "edit-page.js": "1.edit-page-ec9f57d7faa25e335baf.js",
+  "frontdoor-view-resource.js": "0.frontdoor-view-resource-511b223515eb0ac3ced0.js",
+  "index.js": "index-796d5b88c354e6d5254a.js",
+  "sunny.js": "sunny-80b9e92cbdec8f218198.js",
+  "vendor.js": "vendor-50e3d5c31579e674a1a0.js"
 }
