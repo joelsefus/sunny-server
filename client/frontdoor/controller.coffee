@@ -26,18 +26,14 @@ class Controller extends MainController
     response.done =>
       @_view_resource doc
     response.fail =>
-      MessageChannel.request 'display-message', 'Failed to get document', 'danger'
+      MessageChannel.request 'danger', 'Failed to get document'
       
     
   frontdoor: ->
     user = MainChannel.request 'current-user'
-    console.log 'current-user', user
-    show_login_form = false
     if not user.has 'name'
-      console.log 'current-user has not name', user
       view = new Backbone.Marionette.ItemView
         template: login_form
-      show_login_form = true
       @_show_content view
     else
       @view_page 'intro'

@@ -7,8 +7,6 @@ Controller = require './controller'
 MainChannel = Backbone.Radio.channel 'global'
 SunnyChannel = Backbone.Radio.channel 'sunny'
 
-
-
 class Router extends BootStrapAppRouter
   appRoutes:
     'sunny': 'list_clients'
@@ -22,9 +20,9 @@ MainChannel.reply 'applet:sunny:route', () ->
     controller
   SunnyChannel.reply 'edit-client', (id) ->
     controller.edit_client id
-  console.log controller
   router = new Router
     controller: controller
   if __DEV__
+    #console.log controller
     window.scontroller = controller
   
