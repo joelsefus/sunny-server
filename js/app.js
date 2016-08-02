@@ -1,4 +1,4 @@
-var APIPATH, HOST, PORT, Sequelize, Strategy, UseMiddleware, app, bodyParser, clientPath, clientResource, compiler, config, cookieParser, db, documentPath, documentResource, ensureLogin, epilogue, express, expressSession, gzipStatic, http, middleware, morgan, os, passport, path, server, sql, webpack;
+var APIPATH, HOST, PORT, Sequelize, Strategy, UseMiddleware, app, auth, beautify, bodyParser, clientPath, clientResource, compiler, config, cookieParser, db, documentPath, documentResource, ensureLogin, epilogue, express, expressSession, gzipStatic, http, make_page, make_page_header, middleware, morgan, os, pages, passport, path, server, sql, webpack, webpackManifest, write_page;
 
 os = require('os');
 
@@ -34,24 +34,15 @@ HOST = process.env.NODE_IP || os.hostname();
 
 db = require('./models');
 
+pages = require('./pages');
+
+webpackManifest = require('../build/manifest.json');
+
+beautify = require('js-beautify').html;
+
 sql = db.sequelize;
 
-sql["import"]('./models/user');
-
-sql["import"]('./models/client');
-
-sql["import"]('./models/document');
-
 UseMiddleware = false || process.env.__DEV__ === 'true';
-
-sql.models.user.findOrCreate({
-  where: {
-    name: 'admin'
-  },
-  defaults: {
-    password: 'admin'
-  }
-}).then(function(user, created) {});
 
 passport.use(new Strategy(function(username, password, done) {
   return sql.models.user.findOne({
@@ -118,6 +109,14 @@ app.get('/logout', function(req, res) {
   res.redirect('/');
 });
 
+auth = function(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    return res.redirect('/');
+  }
+};
+
 app.get('/health', function(req, res, next) {
   return res.end();
 });
@@ -141,27 +140,47 @@ if (UseMiddleware) {
   app.use('/build', gzipStatic(path.join(__dirname, '../build')));
 }
 
-app.get('/', function(req, res, next) {
-  var beautify, index, manifest, page, theme;
+make_page = function(name, theme) {
+  var filename, manifest, page;
   if (UseMiddleware) {
     manifest = {
-      'app.js': 'app.js'
+      'vendor.js': 'vendor.js'
     };
+    filename = name + ".js";
+    manifest[filename] = filename;
   } else {
-    manifest = require('../build/manifest.json');
+    manifest = webpackManifest;
   }
-  theme = 'cornsilk';
-  page = require('./index');
-  beautify = require('js-beautify').html;
-  index = page(manifest, theme);
-  index = beautify(index);
-  res.writeHead(200, {
-    'Content-Length': Buffer.byteLength(index),
+  page = pages[name](manifest, theme);
+  return beautify(page);
+};
+
+make_page_header = function(res, page) {
+  return res.writeHead(200, {
+    'Content-Length': Buffer.byteLength(page),
     'Content-Type': 'text/html'
   });
-  res.write(index);
+};
+
+write_page = function(page, res, next) {
+  make_page_header(res, page);
+  res.write(page);
   res.end();
   return next();
+};
+
+app.get('/', function(req, res, next) {
+  var page, theme;
+  theme = 'cornsilk';
+  page = make_page('index', theme);
+  return write_page(page, res, next);
+});
+
+app.get('/sunny', auth, function(req, res, next) {
+  var page, theme;
+  theme = 'custom';
+  page = make_page('sunny', theme);
+  return write_page(page, res, next);
 });
 
 epilogue.initialize({
@@ -192,10 +211,6 @@ documentPath = APIPATH + "/sitedocuments";
 documentResource = epilogue.resource({
   model: sql.models.document,
   endpoints: [documentPath, documentPath + "/:name"]
-});
-
-app.get(APIPATH + "/node-docs", function(req, res, next) {
-  return res.json(APIPATH);
 });
 
 server = http.createServer(app);

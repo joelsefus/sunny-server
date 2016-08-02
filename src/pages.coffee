@@ -1,6 +1,6 @@
 tc = require 'teacup'
 
-index = tc.renderable (manifest, theme) ->
+base_page = tc.renderable (appfile, manifest, theme) ->
   tc.doctype()
   tc.html xmlns:'http://www.w3.org/1999/xhtml', ->
     tc.head ->
@@ -22,7 +22,19 @@ index = tc.renderable (manifest, theme) ->
       tc.script
         type: 'text/javascript'
         charset: 'utf-8'
-        src: "build/#{manifest['app.js']}"
+        src: "build/#{manifest['vendor.js']}"
+      tc.script
+        type: 'text/javascript'
+        charset: 'utf-8'
+        src: "build/#{manifest[appfile]}"
               
-      
-module.exports = index
+
+index = (manifest, theme) ->
+  base_page 'index.js', manifest, theme
+sunny = (manifest, theme) ->
+  base_page 'sunny.js', manifest, theme
+  
+module.exports =
+  index: index
+  sunny: sunny
+  

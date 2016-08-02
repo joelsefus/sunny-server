@@ -1,8 +1,8 @@
-var index, tc;
+var base_page, index, sunny, tc;
 
 tc = require('teacup');
 
-index = tc.renderable(function(manifest, theme) {
+base_page = tc.renderable(function(appfile, manifest, theme) {
   tc.doctype();
   return tc.html({
     xmlns: 'http://www.w3.org/1999/xhtml'
@@ -39,13 +39,29 @@ index = tc.renderable(function(manifest, theme) {
           return tc.div('.col-sm-2');
         });
       });
+      tc.script({
+        type: 'text/javascript',
+        charset: 'utf-8',
+        src: "build/" + manifest['vendor.js']
+      });
       return tc.script({
         type: 'text/javascript',
         charset: 'utf-8',
-        src: "build/" + manifest['app.js']
+        src: "build/" + manifest[appfile]
       });
     });
   });
 });
 
-module.exports = index;
+index = function(manifest, theme) {
+  return base_page('index.js', manifest, theme);
+};
+
+sunny = function(manifest, theme) {
+  return base_page('sunny.js', manifest, theme);
+};
+
+module.exports = {
+  index: index,
+  sunny: sunny
+};

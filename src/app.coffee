@@ -19,23 +19,14 @@ PORT = process.env.NODE_PORT or 8081
 HOST = process.env.NODE_IP or os.hostname()
 
 db = require './models'
+pages = require './pages'
+webpackManifest = require '../build/manifest.json'
+beautify = require('js-beautify').html
+
 sql = db.sequelize
 
-# import models
-sql.import './models/user'
-sql.import './models/client'
-sql.import './models/document'
 
 UseMiddleware = false or process.env.__DEV__ is 'true'
-
-sql.models.user.findOrCreate
-  where:
-    name: 'admin'
-  defaults:
-    password: 'admin'
-.then (user, created) ->
-  return
-  
 
 passport.use new Strategy (username, password, done) ->
   sql.models.user.findOne
@@ -91,7 +82,12 @@ app.get '/logout', (req, res) ->
   res.redirect '/'
   return
   
-
+auth = (req, res, next) ->
+  if req.isAuthenticated()
+    next()
+  else
+    res.redirect '/'
+    
 # health url required for openshift
 app.get '/health', (req, res, next) ->
   res.end()
@@ -113,25 +109,37 @@ if UseMiddleware
 else
   app.use '/build', gzipStatic(path.join __dirname, '../build')
 
+make_page = (name, theme) ->
+  if UseMiddleware
+    manifest = {'vendor.js':'vendor.js'}
+    filename = "#{name}.js"
+    manifest[filename] = filename
+  else
+    manifest = webpackManifest
+  page = pages[name] manifest, theme
+  beautify page
+
+make_page_header = (res, page) ->
+  res.writeHead 200,
+    'Content-Length': Buffer.byteLength page
+    'Content-Type': 'text/html'
+  
+write_page = (page, res, next) ->
+  make_page_header res, page
+  res.write page
+  res.end()
+  next()      
 
 app.get '/', (req, res, next) ->
-  #if req?.user
-  #  console.log "there is a session user.", req.user
-  if UseMiddleware
-    manifest = {'app.js':'app.js'}
-  else
-    manifest = require '../build/manifest.json'
   theme = 'cornsilk'
-  page = require './index'
-  beautify = require('js-beautify').html
-  index = page manifest, theme
-  index = beautify index
-  res.writeHead 200,
-    'Content-Length': Buffer.byteLength index
-    'Content-Type': 'text/html'
-  res.write index
-  res.end()
-  next()
+  page = make_page 'index', theme
+  write_page page, res, next
+
+app.get '/sunny', auth, (req, res, next) ->
+  #theme = 'BlanchedAlmond'
+  theme = 'custom'
+  page = make_page 'sunny', theme
+  write_page page, res, next
 
 
 epilogue.initialize
@@ -158,9 +166,6 @@ documentResource = epilogue.resource
   endpoints: [documentPath, "#{documentPath}/:name"]
 
 
-app.get "#{APIPATH}/node-docs", (req, res, next) ->
-  res.json(APIPATH)
-  
 
 server = http.createServer app
 

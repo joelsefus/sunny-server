@@ -14,6 +14,21 @@ sequelize = new Sequelize(config.database, config.username, config.password, con
 
 db = {};
 
+sequelize["import"]('./user');
+
+sequelize["import"]('./client');
+
+sequelize["import"]('./document');
+
+sequelize.models.user.findOrCreate({
+  where: {
+    name: 'admin'
+  },
+  defaults: {
+    password: 'admin'
+  }
+}).then(function(user, created) {});
+
 db.sequelize = sequelize;
 
 db.Sequelize = Sequelize;

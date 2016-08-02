@@ -6,6 +6,12 @@ config = require('../config')[env]
 
 sequelize = new Sequelize(config.database, config.username, config.password, config)
 db = {}
+
+# import models
+sequelize.import './user'
+sequelize.import './client'
+sequelize.import './document'
+
 #fs.readdirSync(__dirname).filter((file) ->
 #  file.indexOf('.') != 0 and file != 'index.js'
 #).forEach (file) ->
@@ -16,6 +22,17 @@ db = {}
 #  if 'associate' of db[modelName]
 #    db[modelName].associate db
 #  return
+
+# FIXME get this from config
+sequelize.models.user.findOrCreate
+  where:
+    name: 'admin'
+  defaults:
+    password: 'admin'
+.then (user, created) ->
+  return
+  
+
 db.sequelize = sequelize
 db.Sequelize = Sequelize
 module.exports = db
