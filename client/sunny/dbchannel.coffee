@@ -44,8 +44,51 @@ SunnyChannel.reply 'get-client', (id) ->
       id: id
   else
     model
+
+
+
+class Yard extends Backbone.Model
+  urlRoot: '/api/dev/sunny/yards'
+
+class YardCollection extends Backbone.Collection
+  model: Yard
+  url: '/api/dev/sunny/yards'
+  
+
+sunny_yards = new YardCollection()
+SunnyChannel.reply 'yard-collection', ->
+  sunny_yards
+
+  
+
+if __DEV__
+  window.sunny_yards = sunny_yards
+
+SunnyChannel.reply 'new-yard', () ->
+  #sunny_yards.create()
+  new Yard
+  
+SunnyChannel.reply 'add-yard', (options) ->
+  yard = sunny_yards.create()
+  for key, value of options
+    yard.set key, value
+  sunny_yards.add yard
+  yard.save()
+
+SunnyChannel.reply 'get-yard', (id) ->
+  model = sunny_yards.get id
+  if model is undefined
+    new Yard
+      id: id
+  else
+    model
+
+
+
+
     
 module.exports =
   ClientCollection: ClientCollection
+  YardCollection: YardCollection
   
 
