@@ -8,17 +8,7 @@ marked = require 'marked'
   
 { form_group_input_div } = require 'agate/src/templates/forms'
 
-{ frontdoor_url
-  editor_url } = require 'agate/src/templates/common'
-
-{ workflow_dropdown } = require 'agate/src/templates/editorbar'
-
-
 { capitalize } = require 'agate/src/apputil'
-
-# Main Templates must use teacup.
-# The template must be a teacup.renderable, 
-# and accept a layout model as an argument.
 
 ########################################
 # Templates
