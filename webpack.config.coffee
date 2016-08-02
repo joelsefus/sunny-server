@@ -45,16 +45,16 @@ StatsPluginFilename =
   production: 'stats.json'
 
 VendorFilename =
-  dev: 'vendor-dev.js'
+  dev: 'vendor.js'
   production: 'vendor-[chunkhash].js'
   
     
 common_plugins = [
   new webpack.DefinePlugin DefinePluginOpts[BuildEnvironment]
   # FIXME: we probably want vendor.js for multipage sites
-  #new webpack.optimize.CommonsChunkPlugin
-  #  name: 'vendor'
-  #  filename: VendorFilename[BuildEnvironment]
+  new webpack.optimize.CommonsChunkPlugin
+    name: 'vendor'
+    filename: VendorFilename[BuildEnvironment]
   new webpack.optimize.OccurenceOrderPlugin true
   new webpack.optimize.AggressiveMergingPlugin()
   new StatsPlugin StatsPluginFilename[BuildEnvironment], chunkModules: true
