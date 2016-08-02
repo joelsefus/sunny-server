@@ -40,10 +40,10 @@ gulp.task 'serve', () ->
 gulp.task 'indexpage', (callback) ->
   manifest = {'app.js':'app.js'}
   theme = css_theme
-  page = require './src/index'
+  pages = require './src/pages'
   beautify = require('js-beautify').html
   #console.log "page", page manifest
-  index = page manifest, theme
+  index = pages.index manifest, theme
   fs.writeFileSync 'index-dev.html', beautify index
   console.log "Created new index-dev.html"
 
