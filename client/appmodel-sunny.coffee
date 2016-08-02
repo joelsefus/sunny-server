@@ -33,8 +33,14 @@ appmodel = new BaseAppModel
   applets:
     [
       {
+        appname: 'sunny'
         name: 'Sunny'
-        url: '/sunny'
+        url: '#sunny'
+      }
+      {
+        appname: 'dbdocs'
+        name: 'DB Docs'
+        url: '#dbdocs'
       }
     ]
   regions: appregions

@@ -5,8 +5,9 @@ require 'radio-shim'
   
 require 'bootstrap'
 
+
 Views = require 'agate/src/views'
-AppModel = require './appmodel'
+AppModel = require './appmodel-sunny'
 
 require 'agate/src/users'
 require 'agate/src/clipboard'
@@ -26,6 +27,7 @@ if __DEV__
   Backbone.Radio.DEBUG = true
   #FIXME
   window.dchnnl = DocChannel
+
 
 ######################
 # start app setup
@@ -72,6 +74,9 @@ MainChannel.on 'appregion:navbar:displayed', ->
 
 
 require './frontdoor/main'
+require './sunny/main'
+require './dbdocs/main'
+
 
 app = new Marionette.Application()
 
@@ -80,7 +85,7 @@ prepare_app app, AppModel
 if __DEV__
   # DEBUG attach app to window
   window.App = app
-
+  
 
 # Start the Application
 # make sure current user is fetched from server before starting app
@@ -89,7 +94,8 @@ response = user.fetch()
 response.done =>
   app.start()
 response.fail =>
-  MessageChannel.request 'danger', 'Get user failed'  
+  console.log "bad things have happened"
+  
 
 module.exports = app
 
