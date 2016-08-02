@@ -26,11 +26,15 @@ _edit_form = tc.renderable (model) ->
         name: field
         placeholder: field
         value: model[field]
-      value: model.title
-  tc.div '.form-group', ->
-    tc.label '.control-label', for:'input_description', 'Description'
-    tc.textarea '#input_description.form-control', name:'description',
-    placeholder: 'description', model.description
+  field = 'description'
+  form_group_input_div
+    input_id: "input_#{field}"
+    input_type: 'textarea'
+    label: capitalize field
+    input_attributes:
+      name: field
+      placeholder: field
+    content: model[field]
     
 ClientForm = tc.renderable (model) ->
   _edit_form model
