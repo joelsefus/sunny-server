@@ -89,7 +89,7 @@ if __DEV__
 
 # Start the Application
 # make sure current user is fetched from server before starting app
-user = MainChannel.request 'current-user'
+user = MainChannel.request 'create-current-user-object', '/api/dev/current-user'
 response = user.fetch()
 response.done =>
   app.start()
