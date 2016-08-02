@@ -9,8 +9,9 @@ db = {}
 
 # import models
 sequelize.import './user'
-sequelize.import './client'
 sequelize.import './document'
+sequelize.import './client'
+sequelize.import './yard'
 
 #fs.readdirSync(__dirname).filter((file) ->
 #  file.indexOf('.') != 0 and file != 'index.js'

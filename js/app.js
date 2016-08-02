@@ -1,4 +1,4 @@
-var APIPATH, HOST, PORT, Sequelize, Strategy, UseMiddleware, app, auth, beautify, bodyParser, clientPath, clientResource, compiler, config, cookieParser, db, documentPath, documentResource, ensureLogin, epilogue, express, expressSession, gzipStatic, http, make_page, make_page_header, middleware, morgan, os, pages, passport, path, server, sql, webpack, webpackManifest, write_page;
+var APIPATH, HOST, PORT, Sequelize, Strategy, UseMiddleware, app, auth, beautify, bodyParser, clientPath, clientResource, compiler, config, cookieParser, db, documentPath, documentResource, ensureLogin, epilogue, express, expressSession, gzipStatic, http, make_page, make_page_header, middleware, morgan, os, pages, passport, path, server, sql, webpack, webpackManifest, write_page, yardPath, yardResource;
 
 os = require('os');
 
@@ -178,7 +178,7 @@ app.get('/', function(req, res, next) {
 
 app.get('/sunny', auth, function(req, res, next) {
   var page, theme;
-  theme = 'custom';
+  theme = 'BlanchedAlmond';
   page = make_page('sunny', theme);
   return write_page(page, res, next);
 });
@@ -204,6 +204,13 @@ clientPath = APIPATH + "/sunny/clients";
 clientResource = epilogue.resource({
   model: sql.models.client,
   endpoints: [clientPath, clientPath + "/:id"]
+});
+
+yardPath = APIPATH + "/sunny/yards";
+
+yardResource = epilogue.resource({
+  model: sql.models.yard,
+  endpoints: [yardPath, yardPath + "/:id"]
 });
 
 documentPath = APIPATH + "/sitedocuments";

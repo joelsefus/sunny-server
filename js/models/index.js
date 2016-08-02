@@ -16,9 +16,11 @@ db = {};
 
 sequelize["import"]('./user');
 
+sequelize["import"]('./document');
+
 sequelize["import"]('./client');
 
-sequelize["import"]('./document');
+sequelize["import"]('./yard');
 
 sequelize.models.user.findOrCreate({
   where: {

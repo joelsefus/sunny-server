@@ -136,8 +136,8 @@ app.get '/', (req, res, next) ->
   write_page page, res, next
 
 app.get '/sunny', auth, (req, res, next) ->
-  #theme = 'BlanchedAlmond'
-  theme = 'custom'
+  theme = 'BlanchedAlmond'
+  #theme = 'custom'
   page = make_page 'sunny', theme
   write_page page, res, next
 
@@ -159,6 +159,11 @@ clientPath = "#{APIPATH}/sunny/clients"
 clientResource = epilogue.resource
   model: sql.models.client
   endpoints: [clientPath, "#{clientPath}/:id"]
+
+yardPath = "#{APIPATH}/sunny/yards"
+yardResource = epilogue.resource
+  model: sql.models.yard
+  endpoints: [yardPath, "#{yardPath}/:id"]
 
 documentPath = "#{APIPATH}/sitedocuments"
 documentResource = epilogue.resource
