@@ -5,7 +5,7 @@ $fa-sass-asset-helper: false !default;
 
 // FIXME
 //$fa-font-path: if($fa-sass-asset-helper, "font-awesome/", "../fonts/font-awesome/") !default;
-$fa-font-path: "../fonts/font-awesome" !default;
+$fa-font-path: "../fonts/font-awesome/" !default;
 $fa-font-name: "fontawesome-webfont" !default;
 
 $fa-font-size-base:   14px !default;
