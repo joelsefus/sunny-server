@@ -33,6 +33,7 @@ gulp.task 'coffee', () ->
   .pipe gulp.dest './js'
 
 gulp.task 'serve', () ->
+  process.env.__DEV__ = 'true'
   nodemon
     script: 'js/app.js'
     watch: 'js/**/*.js'

@@ -1,4 +1,4 @@
-var APIPATH, HOST, PORT, Sequelize, Strategy, UseMiddleware, app, auth, beautify, bodyParser, clientPath, clientResource, compiler, config, cookieParser, db, documentPath, documentResource, ensureLogin, epilogue, express, expressSession, gzipStatic, http, make_page, make_page_header, middleware, morgan, os, pages, passport, path, server, sql, webpack, webpackManifest, write_page, yardPath, yardResource;
+var APIPATH, HOST, PORT, Sequelize, Strategy, UseMiddleware, app, auth, beautify, bodyParser, clientPath, clientResource, compiler, config, cookieParser, db, documentPath, documentResource, ensureLogin, epilogue, express, expressSession, gzipStatic, http, httpsRedirect, make_page, make_page_header, middleware, morgan, os, pages, passport, path, server, sql, webpack, webpackManifest, write_page, yardPath, yardResource;
 
 os = require('os');
 
@@ -21,6 +21,8 @@ expressSession = require('express-session');
 morgan = require('morgan');
 
 gzipStatic = require('connect-gzip-static');
+
+httpsRedirect = require('express-https-redirect');
 
 passport = require('passport');
 
@@ -89,6 +91,13 @@ app.use(expressSession({
   resave: false,
   saveUninitialized: false
 }));
+
+if ('__DEV__' in process.env && process.env.__DEV__ === 'true') {
+  console.log('skipping httpsRedirect');
+} else {
+  console.log("Using httpsRedirect", process.env.__DEV__);
+  app.use('/', httpsRedirect());
+}
 
 app.use(passport.initialize());
 
