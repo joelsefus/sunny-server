@@ -37,6 +37,13 @@ class Controller extends MainController
     # name the chunk
     , 'sunny-new-client'
       
+  add_yard: (client_id) ->
+    require.ensure [], () =>
+      { NewYardView } = require './views/yardeditor'
+      @_show_content new NewYardView
+    # name the chunk
+    , 'sunny-add-yard'
+      
 
   _show_edit_client: (vclass, model) ->
     view = new vclass
@@ -57,6 +64,22 @@ class Controller extends MainController
           MessageChannel.request 'danger', "Failed to load client data."
     # name the chunk
     , 'sunny-edit-client'
+      
+      
+  view_client: (id) ->
+    require.ensure [], () =>
+      ClientMainView = require './views/viewclient'
+      model = SunnyChannel.request 'get-client', id
+      if model.has 'name'
+        @_show_edit_client ClientMainView, model
+      else
+        response = model.fetch()
+        response.done =>
+          @_show_edit_client ClientMainView, model
+        response.fail =>
+          MessageChannel.request 'danger', "Failed to load client data."
+    # name the chunk
+    , 'sunny-view-client'
       
       
 module.exports = Controller

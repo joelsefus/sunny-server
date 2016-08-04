@@ -51,7 +51,7 @@ class BaseItemView extends Backbone.Marionette.ItemView
 
 class BaseListView extends Backbone.Marionette.CompositeView
   childViewContainer: "##{@item_type}-container"
-  ui:
+  ui: ->
     make_new_item: "#new-#{@item_type}"
     
   events: ->
@@ -64,7 +64,8 @@ class BaseListView extends Backbone.Marionette.CompositeView
 
   
   make_new_item: ->
-    navigate_to_url "#sunny/#{@item_type}/new"
+    # FIXME - fix url dont't add 's'
+    navigate_to_url "#sunny/#{@item_type}s/new"
     
   
 

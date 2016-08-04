@@ -50,7 +50,6 @@ class NewPageView extends BasePageEditor
   createModel: ->
     ResourceChannel.request 'new-document'
     
-
   saveModel: ->
     callbacks =
       success: => @trigger 'save:form:success', @model

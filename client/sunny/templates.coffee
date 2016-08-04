@@ -23,13 +23,15 @@ base_item_template = (name) ->
     item_btn = ".btn.btn-default.btn-xs"
     tc.li ".list-group-item.#{name}-item", ->
       tc.span ->
-        tc.a href:"##{name}/view/#{model.name}", model.name
+        tc.a href:"#sunny/#{name}s/view/#{model.id}", model.name
       tc.div '.btn-group.pull-right', ->
         tc.button ".edit-item.#{item_btn}.btn-info.fa.fa-edit", 'edit'
         tc.button ".delete-item.#{item_btn}.btn-danger.fa.fa-close", 'delete'
 
 base_list_template = (name) ->
   tc.renderable (model) ->
+    tc.div '.listview-header', ->
+      tc.text capitalize name
     tc.button "#new-#{name}.btn.btn-default", ->
       "Add New #{capitalize name}"
     tc.hr()
