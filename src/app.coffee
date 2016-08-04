@@ -15,6 +15,7 @@ httpsRedirect = require 'express-https-redirect'
 passport = require 'passport'
 Strategy = require('passport-local').Strategy
 ensureLogin = require 'connect-ensure-login'
+bcrypt = require 'bcrypt'
 
 PORT = process.env.NODE_PORT or 8081
 HOST = process.env.NODE_IP or os.hostname()
@@ -37,11 +38,17 @@ passport.use new Strategy (username, password, done) ->
     if !user
       done null, false
       return
-    if user.password != password
-      done null, false
-      return
-    done null, user
-    return
+    bcrypt.compare password, user.password, (err, res) ->
+      if res
+        done null, user
+      else
+        done null, false
+    ##if user.password != password
+    #if bcrypt.user.password != password
+    #  done null, false
+    #  return
+    #done null, user
+    #return
     
 passport.serializeUser (user, done) ->
   done null, user.id

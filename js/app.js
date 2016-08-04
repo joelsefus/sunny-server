@@ -1,4 +1,4 @@
-var APIPATH, HOST, PORT, Sequelize, Strategy, UseMiddleware, app, auth, beautify, bodyParser, clientPath, clientResource, compiler, config, cookieParser, db, documentPath, documentResource, ensureLogin, epilogue, express, expressSession, gzipStatic, http, httpsRedirect, make_page, make_page_header, middleware, morgan, os, pages, passport, path, server, sql, webpack, webpackManifest, write_page, yardPath, yardResource;
+var APIPATH, HOST, PORT, Sequelize, Strategy, UseMiddleware, app, auth, bcrypt, beautify, bodyParser, clientPath, clientResource, compiler, config, cookieParser, db, documentPath, documentResource, ensureLogin, epilogue, express, expressSession, gzipStatic, http, httpsRedirect, make_page, make_page_header, middleware, morgan, os, pages, passport, path, server, sql, webpack, webpackManifest, write_page, yardPath, yardResource;
 
 os = require('os');
 
@@ -30,6 +30,8 @@ Strategy = require('passport-local').Strategy;
 
 ensureLogin = require('connect-ensure-login');
 
+bcrypt = require('bcrypt');
+
 PORT = process.env.NODE_PORT || 8081;
 
 HOST = process.env.NODE_IP || os.hostname();
@@ -56,11 +58,13 @@ passport.use(new Strategy(function(username, password, done) {
       done(null, false);
       return;
     }
-    if (user.password !== password) {
-      done(null, false);
-      return;
-    }
-    done(null, user);
+    return bcrypt.compare(password, user.password, function(err, res) {
+      if (res) {
+        return done(null, user);
+      } else {
+        return done(null, false);
+      }
+    });
   });
 }));
 
@@ -95,7 +99,6 @@ app.use(expressSession({
 if ('__DEV__' in process.env && process.env.__DEV__ === 'true') {
   console.log('skipping httpsRedirect');
 } else {
-  console.log("Using httpsRedirect", process.env.__DEV__);
   app.use('/', httpsRedirect());
 }
 

@@ -27,7 +27,12 @@ sequelize.models.user.findOrCreate({
     name: 'admin'
   },
   defaults: {
-    password: 'admin'
+    password: 'admin',
+    config: {
+      theme: 'BlanchedAlmond',
+      foo: 'bar',
+      cat: 'dog'
+    }
   }
 }).then(function(user, created) {});
 

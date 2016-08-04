@@ -30,6 +30,11 @@ sequelize.models.user.findOrCreate
     name: 'admin'
   defaults:
     password: 'admin'
+    config:
+      theme: 'BlanchedAlmond'
+      foo: 'bar'
+      cat: 'dog'
+      
 .then (user, created) ->
   return
   
