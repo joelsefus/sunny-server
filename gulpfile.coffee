@@ -35,7 +35,7 @@ gulp.task 'coffee', () ->
 gulp.task 'serve', () ->
   process.env.__DEV__ = 'true'
   nodemon
-    script: 'js/app.js'
+    script: 'js/main.js'
     watch: 'js/**/*.js'
   
 gulp.task 'indexpage', (callback) ->
