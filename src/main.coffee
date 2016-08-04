@@ -9,11 +9,9 @@ ensureLogin = require 'connect-ensure-login'
 
 Middleware = require './middleware'
 UserAuth = require './userauth'
-auth = UserAuth.auth
 ApiRoutes = require './apiroutes'
 db = require './models'
 pages = require './pages'
-console.log 'pages', pages
 
 webpackManifest = require '../build/manifest.json'
 
@@ -24,6 +22,7 @@ HOST = process.env.NODE_IP or os.hostname()
 
 # create express app
 app = express()
+auth = UserAuth.auth
 
 Middleware.setup app
 UserAuth.setup app
@@ -51,17 +50,11 @@ if UseMiddleware
 else
   app.use '/build', gzipStatic(path.join __dirname, '../build')
 
-app.get '/', (req, res, next) ->
-  theme = 'cornsilk'
-  console.log 'pages-> ->', pages
-  page = pages.make_page 'index', theme
-  pages.write_page page, res, next
 
-app.get '/sunny', auth, (req, res, next) ->
-  theme = 'BlanchedAlmond'
-  #theme = 'custom'
-  page = pages.make_page 'sunny', theme
-  pages.write_page page, res, next
+app.get '/', pages.make_page 'index'
+app.get '/sunny', auth, pages.make_page 'sunny'
+      
+
 
 server = http.createServer app
 

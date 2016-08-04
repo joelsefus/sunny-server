@@ -16,15 +16,11 @@ Middleware = require('./middleware');
 
 UserAuth = require('./userauth');
 
-auth = UserAuth.auth;
-
 ApiRoutes = require('./apiroutes');
 
 db = require('./models');
 
 pages = require('./pages');
-
-console.log('pages', pages);
 
 webpackManifest = require('../build/manifest.json');
 
@@ -37,6 +33,8 @@ PORT = process.env.NODE_PORT || 8081;
 HOST = process.env.NODE_IP || os.hostname();
 
 app = express();
+
+auth = UserAuth.auth;
 
 Middleware.setup(app);
 
@@ -67,20 +65,9 @@ if (UseMiddleware) {
   app.use('/build', gzipStatic(path.join(__dirname, '../build')));
 }
 
-app.get('/', function(req, res, next) {
-  var page, theme;
-  theme = 'cornsilk';
-  console.log('pages-> ->', pages);
-  page = pages.make_page('index', theme);
-  return pages.write_page(page, res, next);
-});
+app.get('/', pages.make_page('index'));
 
-app.get('/sunny', auth, function(req, res, next) {
-  var page, theme;
-  theme = 'BlanchedAlmond';
-  page = pages.make_page('sunny', theme);
-  return pages.write_page(page, res, next);
-});
+app.get('/sunny', auth, pages.make_page('sunny'));
 
 server = http.createServer(app);
 

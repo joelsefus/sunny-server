@@ -6,7 +6,7 @@ webpackManifest = require '../../build/manifest.json'
 # FIXME require this
 UseMiddleware = false or process.env.__DEV__ is 'true'
 
-make_page = (name, theme) ->
+make_page_html = (name, theme) ->
   if UseMiddleware
     manifest = {'vendor.js':'vendor.js'}
     filename = "#{name}.js"
@@ -27,7 +27,15 @@ write_page = (page, res, next) ->
   res.end()
   next()      
 
+make_page = (name) ->
+  (req, res, next) ->
+    # FIXME make a site config
+    theme = 'custom'
+    if req.isAuthenticated()
+      config = req.user.config
+      theme = config.theme
+    page = make_page_html name, theme
+    write_page page, res, next
   
 module.exports =
   make_page: make_page
-  write_page: write_page

@@ -1,4 +1,4 @@
-var UseMiddleware, beautify, make_page, make_page_header, pages, webpackManifest, write_page;
+var UseMiddleware, beautify, make_page, make_page_header, make_page_html, pages, webpackManifest, write_page;
 
 beautify = require('js-beautify').html;
 
@@ -8,7 +8,7 @@ webpackManifest = require('../../build/manifest.json');
 
 UseMiddleware = false || process.env.__DEV__ === 'true';
 
-make_page = function(name, theme) {
+make_page_html = function(name, theme) {
   var filename, manifest, page;
   if (UseMiddleware) {
     manifest = {
@@ -37,7 +37,19 @@ write_page = function(page, res, next) {
   return next();
 };
 
+make_page = function(name) {
+  return function(req, res, next) {
+    var config, page, theme;
+    theme = 'custom';
+    if (req.isAuthenticated()) {
+      config = req.user.config;
+      theme = config.theme;
+    }
+    page = make_page_html(name, theme);
+    return write_page(page, res, next);
+  };
+};
+
 module.exports = {
-  make_page: make_page,
-  write_page: write_page
+  make_page: make_page
 };
