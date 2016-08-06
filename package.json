@@ -5,7 +5,7 @@
   "private": true,
   "main": "start.js",
   "scripts": {
-    "start": "node js/app.js"
+    "start": "node js/main.js"
   },
   "author": "Joseph Rawson <joseph.rawson.works@gmail.com>",
   "license": "none",
@@ -55,8 +55,12 @@
     "gulp": "^3.9.1",
     "gulp-coffee": "^2.3.2",
     "gulp-compass": "^2.1.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-jshint": "^2.0.1",
     "gulp-nodemon": "^2.1.0",
     "gulp-size": "^2.1.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
     "hallo": "^1.0.2",
     "html-webpack-plugin": "^2.22.0",
@@ -64,6 +68,7 @@
     "imports-loader": "^0.6.5",
     "jquery": "^2.1.4",
     "jquery-ui": "^1.12.0",
+    "jshint": "^2.9.2",
     "lazer": "0.0.1",
     "lodash": "^4.14.1",
     "marked": "^0.3.6",

@@ -29,10 +29,11 @@ gulp.task 'coffee', () ->
   .pipe coffee
     bare: true
   .on 'error', gutil.log
-  .pipe size()
+  .pipe size
+    showFiles: true
   .pipe gulp.dest './js'
 
-gulp.task 'serve', () ->
+gulp.task 'serve', ['coffee'], () ->
   process.env.__DEV__ = 'true'
   nodemon
     script: 'js/main.js'
