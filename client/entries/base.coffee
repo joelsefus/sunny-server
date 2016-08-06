@@ -54,9 +54,16 @@ MainChannel.on 'appregion:navbar:displayed', ->
   usermenu = MainChannel.request 'main:app:get-region', 'usermenu'
   usermenu.show view
     
+start_with_user = (app, url='/api/dev/current-user') ->
+  # fetch the authenticated user before starting the app
+  user = MainChannel.request 'create-current-user-object', url
+  response = user.fetch()
+  response.done =>
+    app.start()
+  response.fail =>
+    MessageChannel.request 'danger', 'Get current user failed!'
 
-
-module.exports = {}
-
+module.exports =
+  start_with_user: start_with_user
 
 

@@ -1,13 +1,6 @@
-require './base'
-
-#$ = require 'jquery'
-#Backbone = require 'backbone'
+{ start_with_user } = require './base'
 Marionette = require 'backbone.marionette'
-#require 'radio-shim'
-  
-#require 'bootstrap'
-
-#Views = require 'agate/src/views'
+prepare_app = require 'agate/src/app-prepare'
 
 AppModel = require './base-appmodel'
 AppModel.set 'applets',
@@ -24,7 +17,6 @@ AppModel.set 'applets',
     }
   ]
 
-prepare_app = require 'agate/src/app-prepare'
 
 MainChannel = Backbone.Radio.channel 'global'
 MessageChannel = Backbone.Radio.channel 'messages'
@@ -50,13 +42,7 @@ if __DEV__
 
 
 # Start the Application
-# make sure current user is fetched from server before starting app
-user = MainChannel.request 'create-current-user-object', '/api/dev/current-user'
-response = user.fetch()
-response.done =>
-  app.start()
-response.fail =>
-  MessageChannel.request 'danger', 'Get user failed'  
+start_with_user app
 
 module.exports = app
 
