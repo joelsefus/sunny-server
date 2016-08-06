@@ -10,7 +10,7 @@ class Router extends BootStrapAppRouter
   appRoutes:
     'profile': 'show_profile'
     
-MainChannel.reply 'applet:userprofiles:route', () ->
+MainChannel.reply 'applet:userprofile:route', () ->
   controller = new Controller MainChannel
   router = new Router
     controller: controller

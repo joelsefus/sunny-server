@@ -29,6 +29,7 @@ MainChannel.reply 'main:app:appmodel', ->
 ######################
 # require applets
 require '../applets/frontdoor/main'
+require '../applets/userprofile/main'
 require '../applets/sunny/main'
 require '../applets/dbdocs/main'
 

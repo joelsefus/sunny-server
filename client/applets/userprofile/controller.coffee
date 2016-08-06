@@ -9,7 +9,7 @@ MessageChannel = Backbone.Radio.channel 'messages'
 class Controller extends MainController
   show_profile: ->
     require.ensure [], () =>
-      ViewClass = require 'some/view'
+      ViewClass = require './mainview'
       # current-user is always there when app is
       # running
       user = MainChannel.request 'current-user'

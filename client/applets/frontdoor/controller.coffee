@@ -17,7 +17,7 @@ class Controller extends MainController
         model: doc
       @_show_content view
     # name the chunk
-    , 'frontdoor-view-resource'
+    , 'frontdoor-main-view'
     
     
   view_page: (name) ->
