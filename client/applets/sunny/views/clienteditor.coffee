@@ -58,7 +58,7 @@ class BaseClientEditor extends BootstrapFormView
     
   onSuccess: (model) ->
     name = model.get 'name'
-    MessageChannel.request 'display-message', "#{name} saved successfully.", "success"
+    MessageChannel.request 'success', "#{name} saved successfully.", "grain"
     navigate_to_url '#sunny'
     
 
