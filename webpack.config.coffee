@@ -95,19 +95,22 @@ WebPackConfig =
   resolve: resolve
 
 if BuildEnvironment is 'dev'
-  proxy = require './webpack-config/devserver-proxies'
+  #proxy = require './webpack-config/devserver-proxies'
   WebPackConfig.devServer =
     host: os.hostname()
-    proxy: proxy
+    #proxy: proxy
     historyApiFallback:
       index: 'index-dev.html'
   WebPackConfig.devtool = 'source-map'
-  console.log "=====================WEBPACK PROXY CONFIG================="
+
   # http://stackoverflow.com/a/11276104
   #console.log JSON.stringify proxy, null, 4
   # http://stackoverflow.com/a/33707230
   #console.dir proxy, { depth:null, colors:true}
-  prettyjson = require 'prettyjson'
-  console.log prettyjson.render proxy
-  console.log "=====================WEBPACK PROXY CONFIG================="
+
+  #console.log "=====================WEBPACK PROXY CONFIG================="
+  #prettyjson = require 'prettyjson'
+  #console.log prettyjson.render proxy
+  #console.log "=====================WEBPACK PROXY CONFIG================="
+  
 module.exports = WebPackConfig

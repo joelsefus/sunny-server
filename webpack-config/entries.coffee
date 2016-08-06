@@ -2,9 +2,8 @@
 vendor = require './vendor'
 
 module.exports =
-  # FIXME: we probably want vendor.js for multipage sites
   vendor: vendor
-  index: './client/application.coffee'
-  sunny: './client/sunny-app.coffee'
+  index: './client/entries/index.coffee'
+  sunny: './client/entries/sunny.coffee'
 
   
