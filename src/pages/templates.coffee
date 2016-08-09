@@ -33,8 +33,12 @@ index = (manifest, theme) ->
   base_page 'index.js', manifest, theme
 sunny = (manifest, theme) ->
   base_page 'sunny.js', manifest, theme
+admin = (manifest, theme) ->
+  base_page 'admin.js', manifest, theme
   
 module.exports =
   index: index
   sunny: sunny
+  admin: admin
+  
   

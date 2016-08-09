@@ -51,10 +51,7 @@ class NewPageView extends BasePageEditor
     ResourceChannel.request 'new-document'
     
   saveModel: ->
-    callbacks =
-      success: => @trigger 'save:form:success', @model
-      error: => @trigger 'save:form:failure', @model
-    docs = ResourceChannel.request 'app-documents'
+    docs = ResourceChannel.request 'document-collection'
     docs.add @model
     super
 

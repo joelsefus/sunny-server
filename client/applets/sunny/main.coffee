@@ -8,6 +8,7 @@ MainChannel = Backbone.Radio.channel 'global'
 SunnyChannel = Backbone.Radio.channel 'sunny'
 
 class Router extends BootStrapAppRouter
+  empty_sidebar_on_route: true
   appRoutes:
     'sunny': 'list_clients'
     'sunny/clients': 'list_clients'

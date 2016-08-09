@@ -15,6 +15,8 @@ module.exports = [
   'agate/src/apputil'
   'agate/src/bootstrap_router'
   'agate/src/controllers'
+  'agate/src/formview'
+  'agate/src/bootstrap_formview'
   'agate/src/regions'
   'agate/src/views'
   'agate/src/users'

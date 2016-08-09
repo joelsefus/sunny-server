@@ -7,11 +7,13 @@ MainChannel = Backbone.Radio.channel 'global'
 
 
 class Router extends BootStrapAppRouter
+  empty_sidebar_on_route: true
   appRoutes:
     '': 'frontdoor'
     'frontdoor': 'frontdoor'
     'frontdoor/view': 'frontdoor'
     'frontdoor/view/:name': 'view_page'
+    'frontdoor/login': 'show_login'
     #FIXME
     'pages/:name': 'view_page'
     

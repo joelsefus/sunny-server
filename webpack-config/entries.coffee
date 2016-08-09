@@ -1,9 +1,19 @@
 # webpack config module.entry
 vendor = require './vendor'
 
-module.exports =
-  vendor: vendor
-  index: './client/entries/index.coffee'
-  sunny: './client/entries/sunny.coffee'
+client_entry = (name) ->
+  "./client/entries/#{name}.coffee"
 
-  
+pages = [
+  'index'
+  'sunny'
+  'admin'
+  ]
+
+entries =
+  vendor: vendor
+
+for page in pages
+  entries[page] = client_entry page
+
+module.exports = entries

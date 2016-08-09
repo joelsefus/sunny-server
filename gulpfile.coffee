@@ -9,6 +9,8 @@ compass = require 'gulp-compass'
 coffee = require 'gulp-coffee'
 nodemon = require 'gulp-nodemon'
 #runSequence = require 'run-sequence'
+concat = require 'gulp-concat'
+uglify = require 'gulp-uglify'
 
 webpack = require 'webpack'
 tc = require 'teacup'
@@ -31,6 +33,11 @@ gulp.task 'coffee', () ->
   .on 'error', gutil.log
   .pipe size
     showFiles: true
+  .pipe uglify()
+  .pipe size
+    showFiles: true
+  #.pipe concat 'main.js'
+  #.pipe size()
   .pipe gulp.dest './js'
 
 gulp.task 'serve', ['coffee'], () ->

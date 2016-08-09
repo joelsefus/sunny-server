@@ -3,20 +3,27 @@ Marionette = require 'backbone.marionette'
 prepare_app = require 'agate/src/app-prepare'
 
 AppModel = require './base-appmodel'
+console.log "APPMODEL", AppModel
 AppModel.set 'applets',
   [
     {
-      name: 'Clients'
-      url: '/sunny'
+      name: 'User Admin'
+      url: '#useradmin'
     }
     {
       appname: 'bumblr'
       name: 'Bumblr'
       url: '#bumblr'
     }
+    {
+      appname: 'phaserdemo'
+      name: 'Phaser'
+      url: '#phaserdemo'
+    }
   ]
 brand = AppModel.get 'brand'
-brand.url = '#'
+brand.name = 'Admin Page'
+brand.url = '/'
 AppModel.set brand: brand
   
 MainChannel = Backbone.Radio.channel 'global'

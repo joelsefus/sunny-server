@@ -1,4 +1,4 @@
-bcrypt = require 'bcrypt'
+bcrypt = require 'bcryptjs'
 
 module.exports = (sequelize, DataTypes) ->
   sequelize.define 'user',

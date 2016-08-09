@@ -1,0 +1,17 @@
+@import "partials/themes/DarkSeaGreen";
+@import "partials/themes/bootstrap-basic";
+
+@import "bootstrap-variables";
+
+//$background-color: darken($primary-color, 10%);
+//$navbar-default-bg:                darken($background-color, 10%);
+//$navbar-default-border:            darken($navbar-default-bg, 6.5%);
+//$navbar-default-border: $secondary-color;
+
+@import "bootstrap-styles";
+
+@import "partials/listviews";
+
+//.navbar-default {
+//    border-width: 0.2em;
+//}

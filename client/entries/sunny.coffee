@@ -6,6 +6,11 @@ AppModel = require './base-appmodel'
 AppModel.set 'applets',
   [
     {
+      appname: 'bumblr'
+      name: 'Bumblr'
+      url: '#bumblr'
+    }
+    {
       appname: 'sunny'
       name: 'Clients'
       url: '#sunny'
@@ -14,6 +19,11 @@ AppModel.set 'applets',
       appname: 'dbdocs'
       name: 'DB Docs'
       url: '#dbdocs'
+    }
+    {
+      appname: 'todos'
+      name: 'To Dos'
+      url: '#todos'
     }
   ]
 
@@ -30,8 +40,11 @@ MainChannel.reply 'main:app:appmodel', ->
 # require applets
 require '../applets/frontdoor/main'
 require '../applets/userprofile/main'
+require '../applets/bumblr/main'
 require '../applets/sunny/main'
 require '../applets/dbdocs/main'
+require '../applets/todos/main'
+
 
 app = new Marionette.Application()
 

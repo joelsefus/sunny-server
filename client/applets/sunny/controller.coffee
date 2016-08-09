@@ -28,21 +28,21 @@ class Controller extends MainController
       response.fail =>
         MessageChannel.request 'danger', "Failed to load clients."
     # name the chunk
-    , 'sunny-list-clients'
+    , 'sunny-views'
 
   new_client: () ->
     require.ensure [], () =>
       { NewClientView } = require './views/clienteditor'
       @_show_content new NewClientView
     # name the chunk
-    , 'sunny-new-client'
+    , 'sunny-views'
       
   add_yard: (client_id) ->
     require.ensure [], () =>
       { NewYardView } = require './views/yardeditor'
       @_show_content new NewYardView
     # name the chunk
-    , 'sunny-add-yard'
+    , 'sunny-views'
       
 
   _show_edit_client: (vclass, model) ->
@@ -63,7 +63,7 @@ class Controller extends MainController
         response.fail =>
           MessageChannel.request 'danger', "Failed to load client data."
     # name the chunk
-    , 'sunny-edit-client'
+    , 'sunny-views'
       
       
   view_client: (id) ->
@@ -79,7 +79,7 @@ class Controller extends MainController
         response.fail =>
           MessageChannel.request 'danger', "Failed to load client data."
     # name the chunk
-    , 'sunny-view-client'
+    , 'sunny-views'
       
       
 module.exports = Controller

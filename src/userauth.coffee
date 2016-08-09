@@ -1,6 +1,6 @@
 passport = require 'passport'
 Strategy = require('passport-local').Strategy
-bcrypt = require 'bcrypt'
+bcrypt = require 'bcryptjs'
 
 db = require './models'
 sql = db.sequelize
@@ -40,7 +40,7 @@ auth = (req, res, next) ->
   if req.isAuthenticated()
     next()
   else
-    res.redirect '/'
+    res.redirect '/#frontdoor/login'
     
 setup = (app) ->
   app.use passport.initialize()
