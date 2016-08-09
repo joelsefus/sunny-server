@@ -1,12 +1,1 @@
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('document', {
-    name: {
-      type: DataTypes.STRING,
-      unique: true
-    },
-    title: DataTypes.STRING,
-    description: DataTypes.TEXT,
-    doctype: DataTypes.STRING,
-    content: DataTypes.TEXT
-  });
-};
+module.exports=function(e,t){return e.define("document",{name:{type:t.STRING,unique:!0},title:t.STRING,description:t.TEXT,doctype:t.STRING,content:t.TEXT})};
